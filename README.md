@@ -7,14 +7,10 @@ The package supports use with the [Laravel framework][1] v4.x or v5.x providing 
 
 ###Setup:
 
-In order to install, add the following to your `composer.json` file within the `require` block:
+In order to install
 
-```js
-"require": {
-    …
-    "vansteen/sendinblue": "dev-master"
-    …
-}
+```sh
+composer require tzk/sendinblue
 ```
 
 Within Laravel, locate the file `..config/app.php`.
