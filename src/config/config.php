@@ -12,6 +12,6 @@ return array(
     |
     */
 
-    'apikey' => 'your-api-key',
+    'apikey' => env('SENDINBLUE_API_KEY'),
 
 );
