@@ -6,55 +6,60 @@ use Sendinblue\Mailin;
 
 class SendinblueServiceProvider extends ServiceProvider {
 
-	/**
-	 * Indicates if loading of the provider is deferred.
-	 *
-	 * @var bool
-	 */
-	protected $defer = false;
+    /**
+     * Indicates if loading of the provider is deferred.
+     *
+     * @var bool
+     */
+    protected $defer = false;
 
-	/**
-	 * Bootstrap the application events.
-	 *
-	 * @return void
-	 */
-	public function boot()
-	{
-		$app = app();
-		$version = $app::VERSION;
+    /**
+     * Bootstrap the application events.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $app = app();
+        $version = $app::VERSION;
 
-		if ($version[0] == 4)
-		{
-			$this->package('vansteen/sendinblue');
-		}
-		elseif ($version[0] >= 5)
-		{
-			$this->publishes([
-				__DIR__.'/../../config/config.php' => config_path('sendinblue.php'),
-			]);
-		}
-	}
+        if ($version[0] == 4)
+        {
+            $this->package('vansteen/sendinblue');
+        }
+        elseif ($version[0] >= 5)
+        {
+            $this->publishes([
+                __DIR__.'/../../config/config.php' => config_path('sendinblue.php'),
+            ]);
+        }
+    }
 
-	/**
-	 * Register the service provider.
-	 *
-	 * @return void
-	 */
-	public function register()
-	{
-		$this->app->singleton('sendinblue_wrapper', function() {
-			return new SendinblueWrapper(new Mailin('https://api.sendinblue.com/v2.0', Config::get('sendinblue::apikey')));
-		});
-	}
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->mergeConfigFrom(
+            __DIR__.'/../../config/config.php',
+            'sendinblue'
+        );
 
-	/**
-	 * Get the services provided by the provider.
-	 *
-	 * @return array
-	 */
-	public function provides()
-	{
-		return array('sendinblue_wrapper');
-	}
+        $this->app->singleton('sendinblue_wrapper', function() {
+            return new SendinblueWrapper(new Mailin('https://api.sendinblue.com/v2.0', Config::get('sendinblue.apikey')));
+        });
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return array('sendinblue_wrapper');
+    }
 
 }
